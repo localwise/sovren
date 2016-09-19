@@ -26,7 +26,7 @@ module Sovren
     end
 
     def parse(file)
-      result = connection.call(:parse) do |c|
+      result = connection.call(:parse_resume) do |c|
         c.message({
           "DocumentAsByteArray" => Base64.encode64(file),
           "ParserConfigurationParams" => parser_configuration_params,
