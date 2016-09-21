@@ -4,12 +4,16 @@ module Sovren
     
     def self.parse(employment_history)
       return Array.new if employment_history.nil?
+
       result = employment_history.css('EmployerOrg').collect do |item|
         position = item.css('PositionHistory').first
+
         e = Employment.new
         e.employer = item.css('EmployerOrgName').text
+
         e.division = position.css('OrganizationName').text
         e.division = nil if e.employer == e.division
+
         e.city, e.state, e.country = item.css('PositionLocation Municipality, PositionLocation Region, PositionLocation CountryCode').collect(&:text)
         e.title = position.css('Title').text
         e.description = position.css('Description').text

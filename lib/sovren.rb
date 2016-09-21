@@ -6,7 +6,7 @@ require 'nokogiri'
 
 module Sovren
   class << self
-    FIELDS = [:endpoint, :username, :password, :timeout, :hard_time_out_multiplier, :parser_configuration_params]
+    FIELDS = [:endpoint, :account_id, :service_key]
     attr_accessor(*FIELDS)
 
     def configure

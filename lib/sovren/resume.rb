@@ -2,11 +2,19 @@ require 'json'
 
 module Sovren
   class Resume
-    attr_accessor :executive_summary, :objective, :contact_information, :education_history, :employment_history, :certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history, :publication_history, :references
+    attr_accessor :executive_summary, :objective, :contact_information, :education_history, :employment_history, 
+                  :certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history, 
+                  :publication_history, :references, :parsed_resume_results
 
-    def self.parse(resume)
-      parsed_resume = Nokogiri::XML.parse(resume)
+    def self.parse(parsed_resume_results)
+      parsed_resume = Nokogiri::XML.parse(parsed_resume_results[:xml])
       resume = self.new
+
+      resume.parsed_resume_results = parsed_resume_results
+
+      #TODO: create adapter classes when we know what fields we need
+=begin
+      resume.employment_history = Employment.parse(parsed_resume.css('EmploymentHistory').first)
       resume.executive_summary = parsed_resume.css('ExecutiveSummary').text
       resume.objective = parsed_resume.css('Objective').text
       resume.contact_information = ContactInformation.parse(parsed_resume.css('ContactInfo').first)
@@ -21,6 +29,7 @@ module Sovren
       resume.patent_history = Patent.parse(parsed_resume.css('PatentHistory').first)
       resume.publication_history = Publication.parse(parsed_resume.css('PublicationHistory').first)
       resume.references = Reference.parse(parsed_resume.css('References').first)
+=end
       resume
     end
 

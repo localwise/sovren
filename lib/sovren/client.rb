@@ -1,52 +1,56 @@
 module Sovren
   class Client
-    attr_reader :endpoint, :username, :password, :timeout, :hard_time_out_multiplier, :parser_configuration_params
+    attr_reader :endpoint, :account_id, :service_key
 
     #Initialize the client class that will be used for all sovren requests.
     #
     # @param [Hash] options
-    # @option options String :endpoint The url that the web service is located at
-    # @option options String :username The HTTP Basic auth username for the webservice
-    # @option options String :password The HTTP Basic auth password for the webservice
-    # @option options Integer :timeout The timeout for the parser
-    # @option options Integer :hard_time_out_multiplier The hard timeout for the parser
-    # @option options Integer :parser_configuration_params The parser configuration params, used to tweak the output of the parser
+    # @option options String :endpoint The url that the web service is located
 
-    def initialize(options={})
-      @endpoint = options[:endpoint]
-      @username = options[:username]
-      @password = options[:password]
-      @timeout = options[:timout] || 30000
-      @hard_time_out_multiplier = options[:hard_time_out_multiplier] || 2     
-      @parser_configuration_params = options[:parser_configuration_params] || "_100000_0_00000010_0000000110101100_1_0000000000000111111102000000000010000100000000000000"
+    def initialize(account_id, service_key, options={})
+      @account_id = account_id
+      @service_key = service_key
+      @endpoint = options[:endpoint] || 'http://services.resumeparsing.com/ParsingService.asmx?wsdl'
     end
 
     def connection
-      Savon.client(wsdl: endpoint, log: false)
+      Savon.client(wsdl: @endpoint, log: false)
     end
 
-    def parse(file)
-      result = connection.call(:parse_resume) do |c|
-        c.message({
-          "DocumentAsByteArray" => Base64.encode64(file),
-          "ParserConfigurationParams" => parser_configuration_params,
-          "AlsoUseSovrenTaxonomy" => true,
-          "EmbedConvertedTextInHrXml" => true,
-          "HardTimeOutMultiplier" => hard_time_out_multiplier,
-          "TimeOutInMs" => timeout})
+    def credits_remaining
+      account_info[:get_account_info_response][:get_account_info_result][:credits_remaining].to_i
+    end
+
+    def credits_used
+      account_info[:get_account_info_response][:get_account_info_result][:credits_used].to_i
+    end
+
+    def credits_expiration_date
+      DateTime.parse( account_info[:get_account_info_response][:get_account_info_result][:expiration_date] )
+    end
+
+    #returns resume object
+    def parse_resume(file_url)
+      fileBuf = open(file_url,"rb") {|io| io.read}
+      parsed_resume_results = connection.call(:parse_resume, message: { "request" => account_hash.merge({
+                                                                                                          "FileBytes"     => Base64.encode64(fileBuf),
+                                                                                                          "OutputHtml"    => true,
+                                                                                                          "Configuration" => nil,
+                                                                                                          "RevisionDate"  => nil,
+                                                                                                        }) }).to_hash[:parse_resume_response][:parse_resume_result]
+
+      Resume.parse(parsed_resume_results)
+    end
+
+    private
+    
+      def account_info
+        connection.call(:get_account_info, message: { "request" => account_hash }).body
       end
 
-      Resume.parse(result.body[:parse_response][:parse_result])
-    end
-
-    def convert(file, format)
-      result = connection.call(:do_conversion_simplified) do |c|
-        c.message({
-          "DocumentAsByteArray" => Base64.encode64(file),
-          "OutputType" => format})
+      def account_hash
+        {"AccountId" => @account_id, "ServiceKey" => @service_key}
       end
-
-      result.body[:do_conversion_simplified_response][:do_conversion_simplified_result].to_s
-    end
+    
   end
 end
