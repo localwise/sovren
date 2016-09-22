@@ -8,10 +8,6 @@ module Sovren
       result.first_name = contact_information.css('PersonName GivenName').collect(&:text).join(" ")
       result.middle_name = contact_information.css('PersonName MiddleName').collect(&:text).join(" ")
       result.last_name = contact_information.css('PersonName FamilyName').collect(&:text).join(" ")
-      result.aristocratic_title = contact_information.css('PersonName Affix[type=aristocraticTitle]').collect(&:text).join(" ")
-      result.form_of_address = contact_information.css('PersonName Affix[type=formOfAddress]').collect(&:text).join(" ")
-      result.generation = contact_information.css('PersonName Affix[type=generation]').collect(&:text).join(" ")
-      result.qualification = contact_information.css('PersonName Affix[type=qualification]').collect(&:text).join(" ")
 
       address = contact_information.css('PostalAddress DeliveryAddress AddressLine').collect(&:text)
       result.address_line_1 = address[0] if address.length > 0
