@@ -1,13 +1,15 @@
 require 'json'
 
 module Sovren
-  class Resume
+  class Resume < ActiveModelSerializers::Model
     attr_accessor :education_history, :employment_history, :skills, :qualifications, :profile, :parsed_resume_results
                   #:executive_summary, :objective, 
                   #:certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history, 
                   #:publication_history, :references
 
     def self.parse(parsed_resume_results)
+      return nil if parsed_resume_results.nil?
+
       parsed_resume = Nokogiri::XML.parse(parsed_resume_results[:xml])
       resume = self.new
 
@@ -15,7 +17,7 @@ module Sovren
       resume.employment_history = Employment.parse(parsed_resume.css('EmploymentHistory').first)
       resume.education_history = Education.parse(parsed_resume.css('EducationHistory').first)
       resume.qualifications = Competency.parse(parsed_resume.css('Qualifications').first)
-      resume.skills = resume.qualifications.collect(&:name) rescue []
+      resume.skills = resume.qualifications.collect(&:name).uniq rescue []
       resume.profile = ContactInformation.parse(parsed_resume.css('ContactInfo').first)
 =begin
       #TODO: create new adapter classes when we know what fields we need      

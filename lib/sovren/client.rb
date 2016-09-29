@@ -31,6 +31,8 @@ module Sovren
 
     #returns resume object
     def parse_resume(file_url)
+      return nil unless file_url
+
       fileBuf = open(file_url,"rb") {|io| io.read}
       parsed_resume_results = connection.call(:parse_resume, message: { "request" => account_hash.merge({
                                                                                                           "FileBytes"     => Base64.encode64(fileBuf),
