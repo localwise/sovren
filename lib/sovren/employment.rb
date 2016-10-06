@@ -1,7 +1,7 @@
 module Sovren
-  class Employment
+  class Employment < BaseAdapter
     attr_accessor :employer, :title, :start_date, :end_date
-    
+        
     def self.parse(employment_history)
       return Array.new if employment_history.nil?
 

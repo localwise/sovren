@@ -1,5 +1,5 @@
 module Sovren
-  class Reference
+  class Reference < BaseAdapter
     attr_accessor :name, :title, :email, :phone_number
 
     def self.parse(references)

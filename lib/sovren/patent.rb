@@ -1,5 +1,5 @@
 module Sovren
-  class Patent
+  class Patent < BaseAdapter
     attr_accessor :title, :description, :inventor_name, :patent_id
 
     def self.parse(patents)

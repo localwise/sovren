@@ -1,5 +1,5 @@
 module Sovren
-  class Military
+  class Military < BaseAdapter
     attr_accessor :country_served, :branch, :rank_achieved, :recognition_achieved, :discharge_status, :start_date, :end_date
 
     def self.parse(military_history)

@@ -1,5 +1,5 @@
 module Sovren
-  class ContactInformation
+  class ContactInformation < BaseAdapter
     attr_accessor :first_name, :middle_name, :last_name, :aristocratic_title, :form_of_address, :generation, :qualification, :address_line_1, :address_line_2, :city, :state, :country, :postal_code, :home_phone, :mobile_phone, :email, :website
 
     def self.parse(contact_information)

@@ -1,5 +1,5 @@
 module Sovren
-  class Achievement
+  class Achievement < BaseAdapter
     attr_accessor :description
 
     def self.parse(achievements)

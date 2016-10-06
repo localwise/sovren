@@ -1,5 +1,5 @@
 module Sovren
-  class Certification
+  class Certification < BaseAdapter
     attr_accessor :name, :description, :effective_date
 
     def self.parse(certifications)

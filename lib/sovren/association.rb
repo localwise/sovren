@@ -1,5 +1,5 @@
 module Sovren
-  class Association
+  class Association < BaseAdapter
     attr_accessor :name, :role
 
     def self.parse(associations)

@@ -1,5 +1,5 @@
 module Sovren
-  class Client
+  class Client < BaseAdapter
     attr_reader :endpoint, :account_id, :service_key
 
     #Initialize the client class that will be used for all sovren requests.

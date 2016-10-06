@@ -1,5 +1,5 @@
 module Sovren
-  class Competency
+  class Competency < BaseAdapter
     attr_accessor :name
 
     def self.parse(competencies)

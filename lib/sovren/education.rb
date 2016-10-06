@@ -1,5 +1,5 @@
 module Sovren
-  class Education
+  class Education < BaseAdapter
     attr_accessor :school, :degree, :start_date, :end_date
     
     def self.parse(education_history)

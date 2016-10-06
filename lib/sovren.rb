@@ -15,6 +15,7 @@ module Sovren
     end
   end
 
+  require_relative "sovren/base_adapter"
   require_relative "sovren/achievement"
   require_relative "sovren/association"
   require_relative "sovren/certification"

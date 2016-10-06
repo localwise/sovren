@@ -1,5 +1,5 @@
 module Sovren
-  class Language
+  class Language < BaseAdapter
     attr_accessor :language_code, :read, :write, :speak
 
     def self.parse(languages)
