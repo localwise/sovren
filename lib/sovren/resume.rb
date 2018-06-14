@@ -1,7 +1,7 @@
 require 'json'
 
 module Sovren
-  class Resume < ActiveModelSerializers::Model
+  class Resume < ActiveModel::Serializer
     attr_accessor :education_history, :employment_history, :skills, :qualifications, :profile, :parsed_resume_results
                   #:executive_summary, :objective,
                   #:certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history,
