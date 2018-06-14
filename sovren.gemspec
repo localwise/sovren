@@ -23,14 +23,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "savon", "~> 2.2.0"
   spec.add_dependency "httpclient", "~> 2.8.1"
   spec.add_dependency "nokogiri"
-  spec.add_dependency 'active_model_serializers'
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec-given"
   spec.add_development_dependency "vcr"
-
   spec.add_development_dependency "webmock", '< 1.10'
 
   spec.requirements << "Access to a sovren resume parser server."
