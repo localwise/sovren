@@ -1,10 +1,10 @@
 require 'json'
 
 module Sovren
-  class Resume < ActiveModelSerializers::Model
+  class Resume < ActiveModel::Serializer
     attr_accessor :education_history, :employment_history, :skills, :qualifications, :profile, :parsed_resume_results
-                  #:executive_summary, :objective, 
-                  #:certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history, 
+                  #:executive_summary, :objective,
+                  #:certifications, :competencies, :achievements, :associations, :languages, :military_history, :patent_history,
                   #:publication_history, :references
 
     def self.parse(parsed_resume_results)
@@ -20,10 +20,10 @@ module Sovren
       resume.skills = resume.qualifications.collect(&:name).uniq rescue []
       resume.profile = ContactInformation.parse(parsed_resume.css('ContactInfo').first)
 =begin
-      #TODO: create new adapter classes when we know what fields we need      
+      #TODO: create new adapter classes when we know what fields we need
       resume.executive_summary = parsed_resume.css('ExecutiveSummary').text
       resume.objective = parsed_resume.css('Objective').text
-      resume.certifications = Certification.parse(parsed_resume.css('LicensesAndCertifications').first)      
+      resume.certifications = Certification.parse(parsed_resume.css('LicensesAndCertifications').first)
       resume.achievements = Achievement.parse(parsed_resume.css('Achievements').first)
       resume.associations = Association.parse(parsed_resume.css('Associations').first)
       resume.languages = Language.parse(parsed_resume.css('Languages').first)
